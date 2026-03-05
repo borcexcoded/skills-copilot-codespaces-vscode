@@ -1,6 +1,7 @@
 import asyncio
 import io
 import os
+import uuid
 
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -8,9 +9,6 @@ import face_recognition
 import numpy as np
 
 from app.database import get_db
-
-IS_VERCEL = os.getenv("VERCEL", "") == "1"
-_PHOTO_ROOT = "/tmp" if IS_VERCEL else "app/static"
 from app.models.user import User
 from app.models.organization import Admin
 from app.auth import get_current_admin
@@ -92,8 +90,7 @@ async def register_user(
                    f"If this is a twin or different person, please contact an admin to override.",
         )
 
-    import uuid
-    photo_dir = f"{_PHOTO_ROOT}/photos/{admin.org_id}"
+    photo_dir = f"app/static/photos/{admin.org_id}"
     os.makedirs(photo_dir, exist_ok=True)
     photo_filename = f"{uuid.uuid4().hex}.jpg"
     photo_path = f"{photo_dir}/{photo_filename}"

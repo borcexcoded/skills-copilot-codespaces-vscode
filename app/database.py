@@ -2,10 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# On Vercel, the filesystem is read-only except /tmp/
-IS_VERCEL = os.getenv("VERCEL", "") == "1"
-_default_db = "sqlite:////tmp/attendance.db" if IS_VERCEL else "sqlite:///attendance.db"
-DATABASE_URL = os.getenv("DATABASE_URL", _default_db)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///attendance.db")
 
 # SQLite needs check_same_thread=False; PostgreSQL/Supabase does not
 connect_args = {}

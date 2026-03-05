@@ -23,9 +23,7 @@ from app.auth import get_current_admin
 
 router = APIRouter(tags=["Recognition"])
 
-IS_VERCEL = os.getenv("VERCEL", "") == "1"
-_STATIC_ROOT = Path("/tmp" if IS_VERCEL else "app/static")
-UNKNOWN_FACES_DIR = _STATIC_ROOT / "unknown_faces"
+UNKNOWN_FACES_DIR = Path("app/static/unknown_faces")
 UNKNOWN_FACES_DIR.mkdir(parents=True, exist_ok=True)
 
 

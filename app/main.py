@@ -1,12 +1,9 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.database import engine, Base
 from app.routes import register, recognize, attendance_routes, members, auth_routes, import_routes, visitor_routes, meeting_routes
-
-IS_VERCEL = os.getenv("VERCEL", "") == "1"
 
 # Create all DB tables
 Base.metadata.create_all(bind=engine)
@@ -68,15 +65,16 @@ def health_check():
     return {"status": "ok", "message": "Church Attendance System is running"}
 
 
-if not IS_VERCEL:
-    @app.get("/")
-    async def landing():
-        return FileResponse("app/static/landing.html")
+@app.get("/")
+async def landing():
+    return FileResponse("app/static/landing.html")
 
-    @app.get("/app")
-    async def dashboard():
-        return FileResponse("app/static/app.html")
 
-    # Mount static files last (local dev only — Vercel serves via Next.js)
-    app.mount("/static", StaticFiles(directory="app/static"), name="static")
+@app.get("/app")
+async def dashboard():
+    return FileResponse("app/static/app.html")
+
+
+# Mount static files last
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 

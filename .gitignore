@@ -22,3 +22,4 @@ frontend/out/
 # Photos (user data)
 app/static/photos/
 app/static/unknown_faces/*.jpg
+.vercel
