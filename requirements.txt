@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
-opencv-python
+opencv-python-headless
 face_recognition
 numpy
 sqlalchemy

@@ -1,15 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  /* In production on Vercel, /api/* is handled by Python serverless functions.
+     In local dev, proxy to the FastAPI backend. */
   async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${apiUrl}/api/:path*`,
-      },
-    ];
+    return process.env.NODE_ENV === "development"
+      ? [{ source: "/api/:path*", destination: "http://localhost:8000/api/:path*" }]
+      : [];
   },
 };
 

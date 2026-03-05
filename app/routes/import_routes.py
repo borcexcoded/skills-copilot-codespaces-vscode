@@ -2,6 +2,7 @@
 
 import csv
 import io
+import os
 import asyncio
 
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
@@ -13,6 +14,9 @@ from app.database import get_db
 from app.models.user import User
 from app.models.organization import Admin
 from app.auth import get_current_admin
+
+IS_VERCEL = os.getenv("VERCEL", "") == "1"
+_PHOTO_ROOT = "/tmp" if IS_VERCEL else "app/static"
 
 router = APIRouter(tags=["Import"])
 
@@ -124,8 +128,8 @@ async def update_member_photo(
     if encoding is None:
         raise HTTPException(400, "No face detected in the photo")
 
-    import os, uuid
-    photo_dir = f"app/static/photos/{admin.org_id}"
+    import uuid
+    photo_dir = f"{_PHOTO_ROOT}/photos/{admin.org_id}"
     os.makedirs(photo_dir, exist_ok=True)
     photo_filename = f"{uuid.uuid4().hex}.jpg"
     photo_path = f"{photo_dir}/{photo_filename}"
