@@ -1,0 +1,11 @@
+.venv
+venv
+.git
+.gitignore
+frontend
+*.db
+__pycache__
+.DS_Store
+*.pyc
+app/static/photos/*
+app/static/unknown_faces/*
